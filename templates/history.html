@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Analysis History{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+<h2 class="text-center mb-5">
+Previous Resume Analyses
+</h2>
+
+{% if history %}
+
+<table class="table table-dark table-striped">
+
+<thead>
+
+<tr>
+
+<th>Date</th>
+
+<th>ATS Score</th>
+
+<th>Matched Skills</th>
+
+<th>Missing Skills</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+
+{% for item in history %}
+
+<tr>
+
+<td>{{ item.created_at }}</td>
+
+<td>{{ item.ats_score }}</td>
+
+<td>{{ item.matched_skills }}</td>
+
+<td>{{ item.missing_skills }}</td>
+
+</tr>
+
+{% endfor %}
+
+</tbody>
+
+</table>
+
+{% else %}
+
+<div class="alert alert-info">
+
+No resume analyses found.
+
+</div>
+
+{% endif %}
+
+<div class="text-center">
+
+<a href="/dashboard" class="btn btn-primary">
+
+Back to Dashboard
+
+</a>
+
+</div>
+
+</div>
+
+{% endblock %}

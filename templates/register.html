@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block content %}
+
+<div class="auth-wrapper">
+
+<div class="auth-card">
+
+<div class="logo">
+Career<span>Pilot</span> AI
+</div>
+
+<div class="subtitle">
+Create your account
+</div>
+
+{% if error %}
+<div class="alert alert-danger">
+{{ error }}
+</div>
+{% endif %}
+
+<form method="POST">
+
+<div class="form-group">
+<label>Full Name</label>
+<input
+type="text"
+name="name"
+class="form-control-custom"
+required>
+</div>
+
+<div class="form-group">
+<label>Email</label>
+<input
+type="email"
+name="email"
+class="form-control-custom"
+required>
+</div>
+
+<div class="form-group">
+<label>Password</label>
+<input
+type="password"
+name="password"
+class="form-control-custom"
+required>
+</div>
+
+<button class="btn-primary-custom">
+Create Account
+</button>
+
+</form>
+
+<div class="auth-link">
+
+Already have an account?
+
+<a href="/login">
+
+Login
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}AI Interview{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+<h2 class="text-center mb-4">
+
+CareerPilot AI Interview
+
+</h2>
+
+<button id="generateBtn"
+        onclick="generateInterview()"
+        class="btn btn-primary w-100">
+    Generate Interview Questions
+</button>
+
+<div id="questions" class="mt-4"></div>
+
+<div id="loading"
+class="text-center mt-4"
+style="display:none;">
+
+<div class="spinner-border"></div>
+
+<p class="mt-3">
+
+Generating Questions...
+
+</p>
+
+</div>
+
+<div id="questions" class="mt-5"></div>
+
+</div>
+
+<script>
+
+document.getElementById("generateBtn").onclick=async()=>{
+
+document.getElementById("loading").style.display="block";
+
+const res=await fetch("/api/interview",{
+
+method:"POST"
+
+});
+
+const data=await res.json();
+
+document.getElementById("loading").style.display="none";
+
+let html="";
+
+data.questions.forEach((q,i)=>{
+
+html+=`
+
+<div class="card mb-3">
+
+<div class="card-body">
+
+<h5>Question ${i+1}</h5>
+
+<p>${q}</p>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+document.getElementById("questions").innerHTML=html;
+
+}
+
+</script>
+
+{% endblock %}

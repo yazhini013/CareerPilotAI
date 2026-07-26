@@ -1,0 +1,321 @@
+{% extends "base.html" %}
+
+{% block title %}Analysis Results{% endblock %}
+
+{% block content %}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+    <div class="container">
+
+        <a class="navbar-brand fw-bold" href="/dashboard">
+            Career<span class="text-primary">Pilot</span> AI
+        </a>
+
+        <div>
+            <a href="/dashboard" class="btn btn-outline-light btn-sm">Dashboard</a>
+            <a href="/upload" class="btn btn-success btn-sm">New Analysis</a>
+            <a href="/logout" class="btn btn-danger btn-sm">Logout</a>
+        </div>
+
+    </div>
+</nav>
+
+<div class="container py-5">
+
+    <h2 class="text-center mb-2">
+        AI Resume Analysis
+    </h2>
+
+    <p class="text-center text-secondary mb-5">
+        CareerPilot AI compared your resume with the job description and generated an ATS-optimized version.
+    </p>
+
+    <!-- ATS SCORE -->
+
+    <div class="card bg-dark border-primary mb-4">
+
+        <div class="card-body text-center">
+
+            <h5>ATS Score</h5>
+
+            <h1 class="display-1 fw-bold text-primary">
+                {{ result.get("ats_score",0) }}
+            </h1>
+
+            <h5>/100</h5>
+
+            {% if result.get("ats_score",0) >= 80 %}
+
+            <div class="alert alert-success mt-3">
+                Excellent! Your resume is highly ATS compatible.
+            </div>
+
+            {% elif result.get("ats_score",0) >= 60 %}
+
+            <div class="alert alert-warning mt-3">
+                Good resume. Small improvements can increase recruiter visibility.
+            </div>
+
+            {% else %}
+
+            <div class="alert alert-danger mt-3">
+                Resume requires significant optimization.
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+    <!-- EXTRA METRICS -->
+
+    <div class="row text-center mb-5">
+
+        <div class="col-md-3">
+
+            <div class="card bg-dark border-warning">
+
+                <div class="card-body">
+
+                    <h4 class="text-warning">
+                        {{ result.get("career_readiness",0) }}
+                    </h4>
+
+                    <small>Career Readiness</small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card bg-dark border-info">
+
+                <div class="card-body">
+
+                    <h4 class="text-info">
+                        {{ result.get("confidence",0) }}%
+                    </h4>
+
+                    <small>AI Confidence</small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card bg-dark border-success">
+
+                <div class="card-body">
+
+                    <h4 class="text-success">
+                        {{ result.get("keyword_match",0) }}%
+                    </h4>
+
+                    <small>Keyword Match</small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <div class="card bg-dark border-primary">
+
+                <div class="card-body">
+
+                    <h4 class="text-primary">
+                        {{ result.get("recruiter_recommendation","Pending") }}
+                    </h4>
+
+                    <small>Recruiter Decision</small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- MATCHED / MISSING -->
+
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <div class="card bg-dark border-success mb-4">
+
+                <div class="card-header text-success fw-bold">
+
+                    Matched Skills
+
+                    <span class="badge bg-success float-end">
+                        {{ result.get("matched_skills",[])|length }}
+                    </span>
+
+                </div>
+
+                <div class="card-body">
+
+                    {% for skill in result.get("matched_skills",[]) %}
+
+                    <span class="badge bg-success m-1 p-2">
+                        {{ skill }}
+                    </span>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div class="card bg-dark border-danger mb-4">
+
+                <div class="card-header text-danger fw-bold">
+
+                    Missing Skills
+
+                    <span class="badge bg-danger float-end">
+                        {{ result.get("missing_skills",[])|length }}
+                    </span>
+
+                </div>
+
+                <div class="card-body">
+
+                    {% for skill in result.get("missing_skills",[]) %}
+
+                    <span class="badge bg-danger m-1 p-2">
+                        {{ skill }}
+                    </span>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- IMPROVEMENTS -->
+
+    <div class="card bg-dark border-info mb-4">
+
+        <div class="card-header fw-bold">
+            AI Suggested Resume Improvements
+        </div>
+
+        <div class="card-body">
+
+            <ul>
+
+            {% for item in result.get("resume_improvements",[]) %}
+
+                <li class="mb-2">{{ item }}</li>
+
+            {% endfor %}
+
+            </ul>
+
+        </div>
+
+    </div>
+
+    <!-- CHANGE EXPLANATIONS -->
+
+    <div class="card bg-dark border-warning mb-4">
+
+        <div class="card-header fw-bold text-warning">
+            ⭐ CareerPilot AI Innovation
+        </div>
+
+        <div class="card-body">
+
+            <p>
+                CareerPilot AI explains why every improvement is recommended,
+                helping you understand how your resume becomes more ATS-friendly
+                and recruiter-friendly.
+            </p>
+
+            <hr>
+
+            <ul>
+
+            {% for item in result.get("change_explanations",[]) %}
+
+                <li class="mb-2">{{ item }}</li>
+
+            {% endfor %}
+
+            </ul>
+
+        </div>
+
+    </div>
+
+    <!-- OPTIMIZED RESUME -->
+
+    <div class="card bg-dark border-primary mb-5">
+
+        <div class="card-header fw-bold">
+            CareerPilot AI Optimized Resume
+        </div>
+
+        <div class="card-body">
+
+<pre style="white-space:pre-wrap;color:white;font-size:15px;">
+{{ result.get("optimized_resume","") }}
+</pre>
+
+        </div>
+
+    </div>
+
+    <!-- BUTTONS -->
+
+    <div class="text-center">
+
+        <a href="/download_resume" class="btn btn-success btn-lg me-2">
+            Download Optimized Resume
+        </a>
+
+        <a href="/download_report" class="btn btn-primary btn-lg me-2">
+            Download AI Report
+        </a>
+
+        <a href="/interview" class="btn btn-warning btn-lg me-2">
+            Start AI Interview
+        </a>
+
+        <a href="/history" class="btn btn-secondary btn-lg">
+            View History
+        </a>
+
+    </div>
+
+    <div class="text-center mt-5">
+
+        <small class="text-secondary">
+            Analysis completed successfully using CareerPilot AI
+        </small>
+
+    </div>
+
+</div>
+
+{% endblock %}

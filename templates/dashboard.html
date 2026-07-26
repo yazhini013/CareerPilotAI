@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+    <h1>Welcome, {{ session.name }} 👋</h1>
+
+    <hr>
+
+    <div class="mt-4">
+
+        <a href="/upload" class="btn btn-primary">
+            Resume Analysis
+        </a>
+
+        <a href="/interview" class="btn btn-success">
+            AI Interview
+        </a>
+
+        <a href="/logout" class="btn btn-danger">
+            Logout
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}
